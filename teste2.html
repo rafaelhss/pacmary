@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Cabuloso game - xo serie B</title>
+    <link rel="icon" href="https://www.cruzeiro.com.br/favicon.ico" type="image/x-icon" /> 
+      <meta property="og:image" content="http://crugame.herokuapp.com/img/bola-min.png"/>
+    <meta property="og:title" content="Cabuloso Game"/>
+    <meta property="og:description" content="Use a tradicao azul e evite anos e anos de serie B"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/feiss/aframe-environment-component/ad57b15d/dist/aframe-environment-component.min.js"></script>
+    <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v2.1.0/dist/aframe-physics-system.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+      
+      
+      <script>/*
+        
+        AFRAME.registerComponent('cursor-listener', {
+            init: function () {
+                 this.el.addEventListener('mouseup', function (evt) {
+                console.log(evt);
+                     if(evt.target.id == "whats") {
+                        window.location.href = "whatsapp://send?text=Usei a tradicao do cuguloso para deixar ele apenas " + score + " anos na serie B. Tente tambem: http://crugame.herokuapp.com";   
+                     }
+                     if(evt.target.id == "twitter") {
+                        window.location.href = "http://twitter.com/share?text=Usei a tradicao do cuguloso para deixar ele apenas " + score + " anos na serie B. Tente tambem: &url=http://crugame.herokuapp.com";    
+                     }
+                     if(evt.target.id == "reload") {
+                        window.location.reload();    
+                     }
+              });
+            }
+          });*/
+      </script>
+
+<style type="text/css">
+    body{
+        font-family: "Comic Sans MS", sans-serif;
+        
+    }
+    .overlay {
+        position: absolute;
+        background: #FF0000;
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        left: 110%;
+        transition: opacity 0.1s ease;
+        
+    }
+    .overlay.show {
+        left: 0%;
+        opacity: .2;
+    }
+                /* unvisited link */
+    a:link {
+        color: white;
+        text-decoration: none;
+    }
+
+    a:visited {
+      color: white;
+        text-decoration: none;
+    }
+
+    /* mouse over link */
+    a:hover {
+      color: white;
+        text-decoration: none;
+    }
+
+    /* selected link */
+    a:active {
+      color: white;
+        text-decoration: none;
+    }
+    .modal {
+        position: absolute;
+
+        left: 110%;
+
+        min-width: min-content;
+        width: 40%;
+        height: min-content;
+
+        z-index: 999;
+
+        background: #336699;
+        opacity: 0;
+        visibility: hidden;
+        transition: left 3s ease;
+        border-radius: 3%; 
+        box-shadow: inset 0 0 2em #777777, 0 0 2em #777777;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 150%;
+        text-align: center;
+    }
+    .modal.show {
+        left: 2%;
+        visibility: visible;
+        opacity: 1;
+    }
+    .tutorial .clicktxt{
+        font-size: 50%;
+    }      
+    .modal #text{
+        margin: 5%;
+    }
+    .modal .bora{
+        color: #ffcc00;
+    }   
+    .modal #txtb{
+        color: red;
+        background-color: white;
+        border-top-left-radius: 50%;
+        border-top-right-radius: 50%;
+    }
+    .gameover #share{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .botao {
+        text-decoration: none;
+        color: #eee;
+        display: inline-block;
+        font-weight: bold;
+        padding: 1rem 2rem;
+        margin: 5px;
+        border-radius: 3px;
+
+        font-size: 50%;
+        box-shadow: inset 0 0 1em #777777, 0 0 1em #777777;
+    }
+
+    .reloadbtn{
+        background-color: #aaaaaa;
+    }
+    .gameover #whatsbtn{
+        background-color: #25d366;
+    }
+    .gameover #twitterbtn{
+        background-color: #00acee;
+    }
+    .gameover .about{
+        font-size: 45%;
+    }
+    
+</style>
+      
+
+      
+  </head>
+  <body>
+    <audio src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/858/outfoxing.mp3" crossorigin="anonymous" ></audio>
+ 
+  <div class="overlay"></div>
+  <div class="loading modal show">
+    <div id="text">
+      <div><span>#<span class="bora">BORA</span>RECONSTRUIR</span></div>
+        <div><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i>
+        </div>
+    </div>
+  </div>
+  <div class="tutorial modal">
+      <div id="text">
+          <div><span>#<span class="bora">BORA</span>RECONSTRUIR</span></div>
+          <div>Ajude a afastar anos de serie <span id="txtb">B</span> usando as glorias do cabuloso.</div>
+          <div>
+            <div class="clicktxt">clique na tela para atirar</div>
+            <div class="clicktxt">mova a tela para mirar</div>
+            <div class="botao reloadbtn"><a onclick="init()" >
+                  <span>#<span class="bora">BORA</span>JOGAR</span>
+            </a></div>
+              
+          </div>
+      </div>
+  </div>
+      
+  <div class="gameover modal">
+      <div id="text">
+          <div><span>#<span class="bora">GAME</span>OVER</span></div>
+          <div>Com sua ajuda, o cabuloso vai ficar <span class="bora" id="scoretxt">10</span> anos na serie <span id="txtb">B</span></div>
+          <div>
+              <div id="reloadbtn" class="botao reloadbtn">
+                <a onclick="startGame()" >
+                  <i class="fa fa-whatsapp"></i>
+                  <span>#<span class="bora">BORA</span>JOGARNOVAMENTE</span>
+                </a>
+              </div>
+              <div id="share">
+                  <div id="whatsbtn" class="botao">
+                    <a id="whatshref" href="whatsapp://send?text=Usei a tradicao do cuguloso para deixar ele apenas alguns anos na serie B. Tente tambem: http://crugame.herokuapp.com" >
+                      <i class="fa fa-whatsapp"></i>
+                      whatsapp
+                    </a>
+                  </div>
+                  <div id="twitterbtn" class="botao">
+                    <a id="twitterhref" href="http://twitter.com/share?text=Usei a tradicao do cuguloso para deixar ele apenas alguns anos na serie B. Tente tambem: &url=http://crugame.herokuapp.com" target="_blank">
+                      <i class="fa fa-twitter"></i>
+                      twitter
+                    </a>
+                  </div>
+              </div>
+              <a class="about" onclick="alert('esse jogo eh uma homenagem ao Bolinha!')">About</a>
+          </div>
+      </div>
+  </div>        
+   <a-scene physics id="cena">
+      <a-assets>      
+        <a-asset-item id="gun-obj" src="https://cdn.glitch.com/1d750fac-a652-409d-949b-156f935085a2%2Fgun-1NI7Q2_vScX-model.obj?1510641419352"></a-asset-item>
+        <a-asset-item id="gun-mtl" src="https://cdn.glitch.com/1d750fac-a652-409d-949b-156f935085a2%2Fgun-1NI7Q2_vScX-materials.mtl?1510641419027"></a-asset-item>
+        <!--<a-asset-item id="trophy1-obj" src="models/trophy1/Cup.obj"></a-asset-item>-->
+        <a-asset-item id="trophy2-obj" src="models/trophy2/Pokal.obj"></a-asset-item>
+        <a-asset-item id="ghost-obj" src="models/ghost/3d-model.obj"></a-asset-item>
+         
+       <!--   
+        <audio id="sfx-gun" src="https://cdn.glitch.com/1d750fac-a652-409d-949b-156f935085a2%2Ftrimmed-40MM%20M79%20grenade%20launcher%20single%20shot%20close%20perspective_BLASTWAVEFX_09562.mp3?1510643217955" crossorigin="anonymous" ></audio>
+        <audio id="sfx-copabr" src="sound/copabr.mp3" crossorigin="anonymous" preload="true" ></audio>
+        <audio id="sfx-rosca" src="sound/rosca.mp3" crossorigin="anonymous" preload="true" ></audio>
+        <audio id="sfx-fala" src="sound/falazeze.mp3" crossorigin="anonymous" preload="true" ></audio>
+        <audio id="sfx-cagao" src="sound/cagao.mp3" crossorigin="anonymous" preload="true" ></audio>
+        <audio id="sfx-serieb" src="sound/serieb.mp3" crossorigin="anonymous" preload="true" ></audio>
+     
+          
+          <img id="orangesrc" src="https://cdn.glitch.com/1d750fac-a652-409d-949b-156f935085a2%2Ff7d31bc38804a89a6b288f718296cc27.jpg?1510638410703" crossorigin="anonymous" /> 
+        <img id="orangebump" src="https://cdn.glitch.com/1d750fac-a652-409d-949b-156f935085a2%2Forangebump1.jpg?1510639083481" crossorigin="anonymous" /> 
+          
+          
+          <img id="throwsrc" src="https://cdn.glitch.com/1d750fac-a652-409d-949b-156f935085a2%2Ff7d31bc38804a89a6b288f718296cc27.jpg?1510638410703" crossorigin="anonymous" /> 
+             -->
+          
+          
+          <img id="timegrandesrc" src="img/timegrande-min.jpg" crossorigin="anonymous" /> 
+          <img id="brasileirao" src="img/brasileirao-min.png" crossorigin="anonymous" /> 
+          <img id="copabr" src="img/copabr-min.jpg" crossorigin="anonymous" /> 
+          <img id="six" src="img/six-min.png" crossorigin="anonymous" /> 
+          <img id="fabio" src="img/fabio-min.png" crossorigin="anonymous" /> 
+          <img id="b" src="img/b-min.png" crossorigin="anonymous" /> 
+          <img id="cerca" src="img/cerca-min.png" crossorigin="anonymous" /> 
+          <img id="vemkimg" src="img/vemk-min.png" crossorigin="anonymous" /> 
+          <img id="estrela" src="img/estrelas-min.jpg" crossorigin="anonymous" /> 
+          <img id="whats" src="img/whats-min.png" crossorigin="anonymous" /> 
+          <img id="twitter" src="img/twitter-min.png" crossorigin="anonymous" /> 
+          <img id="reload" src="img/reload-min.png" crossorigin="anonymous" /> 
+          
+          
+          <img id="aecio" src="img/aecio-min.png" crossorigin="anonymous" />
+          <img id="alberto" src="img/alberto-min.png" crossorigin="anonymous" />
+          <img id="ceni" src="img/ceni-min.png" crossorigin="anonymous" />
+          <img id="choro" src="img/choro-min.png" crossorigin="anonymous" />
+          <img id="fe" src="img/fe-min.png" crossorigin="anonymous" />
+          <img id="bola" src="img/bola-min.png" crossorigin="anonymous" />
+          
+          <img id="gordo" src="img/gordo-min.png" crossorigin="anonymous" />
+          <img id="itair" src="img/itair-min.png" crossorigin="anonymous" />
+          <img id="perrella" src="img/perrella-min.png" crossorigin="anonymous" />
+          <img id="serginho" src="img/serginho-min.png" crossorigin="anonymous" />
+          <img id="tiago" src="img/tiago-min.png" crossorigin="anonymous" />
+          <img id="wagner" src="img/wagner-min.png" crossorigin="anonymous" />
+          
+          <a-mixin id="text" text="align: center; value: anos na serie B"></a-mixin>
+         
+                 
+         
+      </a-assets>
+
+        <a-entity id="cam" camera="userHeight: 1.6" look-controls wasd-controls position="0 0 10">
+            <a-entity cursor="fuse: true; fuseTimeout: 500"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.02; radiusOuter: 0.03"
+                material="color: black; shader: flat">
+            </a-entity>
+        </a-entity>
+        
+      <a-entity id="env1" environment="preset:forest; shadow:true; seed:19; lightPosition: 0.7 0.7 0.7"></a-entity>
+      
+        
+
+        
+        <a-sphere class="finish" id="vemk   " scale="2 2 2" position="2 3 2"
+                  rotation="0 250 0"
+               material="src: #vemkimg; repeat: 1 1; transparent:true"
+               shadow
+                  visible="false">
+        </a-sphere>
+         
+        <a-sphere  
+                obj-model="obj: #ghost-obj;" 
+                  id="ghost"
+                  rotation="0 310 0"
+                 position="8.5 15 -2.5"  dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+     <a-box id="terrainscore"  width="8" height="0.1" depth="8" position="8.5 5 -2.5" static-body visible="false"></a-box>
+        
+        <a-text mixin="text"  rotation="0 310 0" font="kelsonsans" position="8.9 4.65 -0.94" width="8" wrap-count="10"></a-text> 
+        <a-text id="score" color="blue" rotation="0 310 0" text="value: 1;" font="kelsonsans" position="9.8 7.34 -1" width="60"></a-text> 
+        <a-text id="timer" rotation="0 50 0" text="value: 30'';" font="kelsonsans" position="-9.8 7.34 -1" width="60" color="green"></a-text> 
+        <!-- esse eh o outro trofeu. tirei por tamanho
+        <a-entity id="throw0"
+                  class="throw"
+                  dynamic-body 
+                  velocity="0 0 20" 
+                  sound="src: #sfx-copabr; autoplay: false;" 
+                  obj-model="obj: #trophy1-obj;" 
+                  position="0 5 20" 
+                  shadow rotation="0 90 0"
+                  scale="0.1 0.2 0.1"
+                  material="src: #copabr; repeat: 50 10"></a-entity>   
+       -->
+       <a-entity id="throw0" 
+                  class="throw"
+                  dynamic-body 
+                  velocity="0 0 20" 
+                  obj-model="obj: #trophy2-obj;" 
+                  position="0 5 20" 
+                  shadow rotation="0 90 0"
+                  scale="0.7 0.7 0.7"
+                  material="src: #copabr; repeat: 5 5"></a-entity>           
+       <a-entity id="throw1" 
+                  class="throw"
+                  dynamic-body 
+                  velocity="0 0 20" 
+                  obj-model="obj: #trophy2-obj;" 
+                  position="0 5 20" 
+                  shadow rotation="0 90 0"
+                  scale="0.7 0.7 0.7"
+                  material="src: #brasileirao; repeat: 5 5"></a-entity>           
+        <a-entity id="throw2" 
+                  class="throw"
+                  dynamic-body 
+                  position="0 5 20" 
+                  velocity="0 0 20"
+                  geometry="primitive: box; radius: 0.3" 
+                  material="src: #timegrandesrc; repeat: 1 1" 
+                  shadow="cast:true;receive:true"></a-entity>
+        <a-entity id="throw3" 
+                  class="throw"
+                  dynamic-body 
+                  position="0 5 20" 
+                  velocity="0 0 20" 
+                  geometry="primitive: box; radius: 0.5" 
+                  material="src: #six; repeat: 1 1" 
+                  shadow="cast:true;receive:true"></a-entity>
+        <a-entity id="throw4" 
+                  class="throw"
+                  dynamic-body 
+                  position="0 5 20" 
+                  velocity="0 0 20" 
+                  geometry="primitive: box; radius: 0.5" 
+                  material="src: #fabio; repeat: 1 1" 
+                  shadow="cast:true;receive:true"></a-entity>        
+        
+    
+        
+     
+        <!-- Physics terrain -->
+        <a-box id="terrain" width="75" height="0.1" depth="150" position="0 0 0" static-body visible="false"></a-box>
+        <!-- parede -->    
+        <a-box id="wall" width="20" material="src: #estrela; repeat: 5 1; transparent:true"
+               height="2" depth="1" position="1 1.5 11.5" material="color: blue; opacity: 1" static-body></a-box>
+        
+        <a-box width="20" 
+               material="src: #cerca; repeat: 10 1; opacity: 0.9"
+               height="1" depth="0.2" position="-7.5 0.6 2" rotation="0 270 0" static-body></a-box>
+        <a-box width="20"
+               material="src: #cerca; repeat: 10 1; opacity: 0.9"
+               height="1" depth="0.2" position="7.5 0.6 2" rotation="0 270 0" static-body></a-box>
+
+        
+        
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="8.5 1 8" 
+               material="src: #itair; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="8.5 1.2 5.05" 
+               material="src: #fe; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>        
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="8.5 2 1.9" 
+               material="src: #serginho; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>
+     
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="8.5 2 -1.15" 
+               material="src: #ceni; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="8.5 1 -4.20" 
+               material="src: #alberto; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>        
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="8.5 1 -7.25" 
+               material="src: #aecio; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>        
+    
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="-8.5 0.7 8" 
+               material="src: #wagner; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="-8.5 0.7 5.05" 
+               material="src: #bola; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>        
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="-8.5 0.7 1.9" 
+               material="src: #perrella; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>
+     
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="-8.5 0.7 -1.15" 
+               material="src: #tiago; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="-8.5 0.7 -4.20" 
+               material="src: #choro; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>        
+        <a-box class="people" height="3" depth="3" width="1" 
+               position="-8.5 0.7 -7.25" 
+               material="src: #gordo; repeat: 1 1; transparent:true"
+               dynamic-body force-pushable shadow></a-box>  
+        
+      
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      <a-sphere class="enemy" position="0 5 -5"dynamic-body force-pushable shadow material="src: #b; repeat: 1 1"></a-sphere>
+      
+ 
+    </a-scene>
+
+      
+  </body>
+  <script>
+       
+      
+    var currThrow = 0;
+    var time = 30
+    var score = 1;
+    var mp3 = document.createElement("audio");
+    var st = undefined;
+        
+    
+      
+    function toggleFinish(hide){
+        var v = true;
+        var s = "3 3 3";
+        if(hide){
+         v = false;
+         s = "0 0 0";      
+        }
+                        //hoje so tem um
+        var finish = document.getElementsByClassName("finish");
+        for (var i = 0; i < finish.length; i++) {
+            finish.item(i).setAttribute("visible",v);
+            finish.item(i).setAttribute("scale", s);
+        }
+    }
+      
+    function startGame(){
+        
+        
+         
+        
+        currThrow = 0;
+        time = 30
+        score = 1; 
+        
+        document.querySelector('.loading').classList.remove("show") 
+        document.querySelector('.tutorial').classList.remove("show") 
+        document.querySelector('.gameover').classList.remove("show") 
+        document.getElementById("timer").setAttribute("text", "value: "+time+"'';");  
+        document.getElementById("timer").setAttribute("color", "green");  
+        document.getElementById("score").setAttribute("text", "value: "+score+";");
+        document.getElementById("ghost").body.position.set(8.5, 15, -2.5);
+        document.getElementById("ghost").setAttribute("rotation","0, 310, 0");
+        
+         
+       startSoundtrack();   
+                
+        toggleFinish(true);
+        
+        
+        
+        var enemies = document.getElementsByClassName("enemy");
+        for (var i = 0; i < enemies.length; i++) {
+            var x = Math.floor(Math.random() * 10)-5;
+            var y = 5;
+            var z = - 8 - i
+            enemies.item(i).body.position.set(x, y, z);
+        }
+        
+        
+        var enemiestimer = setInterval(function(){
+            var enemies = document.getElementsByClassName("enemy");
+            for (var i = 0; i < enemies.length; i++) {                    
+                enemies.item(i).body.velocity.set(0, 0, 2.5);;
+            }    
+        },1000) 
+
+        //tempo de jogo
+        var tempointerval = setInterval(function(){
+            time = time -1;
+            if(time <= 0){
+                clearInterval(enemiestimer);
+                var enemies = document.getElementsByClassName("enemy");
+                for (var i = 0; i < enemies.length; i++) {
+                    enemies.item(i).body.velocity.set(0, 0, 0);;
+                }  
+                document.getElementById("timer").setAttribute("text", "value: Fim de jogo.");
+                showScore();
+
+
+
+                toggleFinish(false);
+                
+                st.src = "";
+                st = undefined;
+
+                clearInterval(tempointerval);
+
+            } else {
+                document.getElementById("timer").setAttribute("text", "value: "+time+"'';");  
+                if(time <= 10){
+                    document.getElementById("timer").setAttribute("color", "red");  
+                } else if(time <= 20){
+                    document.getElementById("timer").setAttribute("color", "yellow");  
+                }
+            }
+        },1000)
+
+    }
+
+      
+   function startSoundtrack(){
+           
+       if(!st){
+        st = document.createElement("audio");
+        st.setAttribute('src', 'sound/itair.mp3');
+        st.setAttribute('loop','true');
+        st.volume = 0.3;
+        st.load();
+        document.documentElement.appendChild(st);
+        st.play();   
+        st.addEventListener('timeupdate', function(){
+            var buffer = .50
+            if(this.currentTime > this.duration - buffer){
+                this.currentTime = 0
+                this.play()
+            }
+        });   
+           
+       }
+        
+   }      
+   function playSound(){
+       if(mp3.paused){
+        var sounds = ["cagao.mp3", "copabr.mp3", "falazeze.mp3", "rosca.mp3", "serieb.mp3"]
+        mp3.setAttribute('src', 'sound/' + sounds[Math.floor(Math.random()*sounds.length)]);
+        mp3.load();
+        document.documentElement.appendChild(mp3);
+        mp3.play();
+       }
+   }       
+      
+   function init(){
+        try{  
+            window.addEventListener('mouseup', function () {
+                dothrow("#throw" + currThrow);
+                currThrow = currThrow + 1;
+                if(currThrow > 4){
+                    currThrow=0
+                }
+                jumpPeople(3);
+               playSound();    
+                
+                
+            });
+            startGame();
+            
+        } catch (err) {
+            alert(err);
+        }
+
+   }
+      
+    function hideModal(){
+        
+    }  
+    function showTuto(){
+        document.querySelector('.tutorial').classList.add("show"); 
+    }  
+    function showScore(){
+        document.querySelector('.gameover').classList.add("show");
+        document.querySelector('#whatshref').href="whatsapp://send?text=Usei a tradicao do cuguloso para deixar ele apenas "+ score+" anos na serie B. Tente tambem: http://crugame.herokuapp.com";
+        
+        document.querySelector('#twitterhref').href="http://twitter.com/share?text=Usei a tradicao do cuguloso para deixar ele apenas " + score + " anos na serie B. Tente tambem: &url=http://crugame.herokuapp.com";
+        
+        document.querySelector('#scoretxt').innerHTML=score;
+        
+        
+    }  
+    
+    document.querySelector('a-scene').addEventListener('loaded', function () {
+        console.log("loaded")
+        console.log(document.querySelector("#cam").body);
+    console.log(document.getElementById("cam").body);
+  
+        document.querySelector('.loading').classList.remove("show") 
+        showTuto();
+    })
+      
+      
+ 
+      
+      
+    function DegreesToRadians(valDeg){
+        return ((2*Math.PI)/360*valDeg)
+    }
+      
+      
+    function jumpPeople(qtd){
+        var people = document.getElementsByClassName("people");
+        for (var i = 0; i < qtd; i++) {
+           people.item(Math.floor(Math.random() * people.length)).body.velocity.set(0, 1.3, 0);;
+        }
+    }  
+    function dothrow(item){
+        
+        var x = document.getElementById("cam").getAttribute("position").x;  
+        var y = document.getElementById("cam").getAttribute("position").y;
+        var z = document.getElementById("cam").getAttribute("position").z;
+        document.querySelector(item).body.position.set(x, y, z);
+
+         
+        var angle = (document.getElementById("cam").getAttribute("rotation").y);
+        var up = (document.getElementById("cam").getAttribute("rotation").x);
+        
+        var hip = 20;
+        var velocityX = 10;
+        var velocityY = 10;
+        
+        velocityX = hip * Math.sin(DegreesToRadians(angle))
+		velocityY = hip * Math.cos(DegreesToRadians(angle))
+        
+        
+        
+        document.querySelector(item).body.velocity.set(-velocityX, 0, -velocityY);
+    
+        
+  /*      
+        var throwitens = document.getElementsByClassName("throw");
+        for (var i = 0; i < throwitens.length; i++) {
+            throwitens.item(i).components.sound.stopSound();
+        } 
+
+        document.querySelector(item).components.sound.playSound();
+        */
+    }  
+      
+      
+      
+    var playerEl = document.getElementById("wall")
+
+    playerEl.addEventListener('collide', function (e) {
+        
+        if(e.detail.body.el.className.indexOf("enemy") >=0){
+            score = score + 1;
+            document.getElementById("score").setAttribute("text", "value: "+score+";");
+            e.detail.body.el.body.position.set(Math.floor(Math.random() * 10)-5, 0, -10);
+            document.getElementById("ghost").body.velocity.set(0, 5, 0);    
+            document.querySelector('.overlay').classList.add("show")
+            setTimeout(function(){
+                document.querySelector('.overlay').classList.remove("show")
+            },200)
+        }
+        
+        
+      e.detail.target.el;  // Original entity (playerEl).
+      e.detail.body.el;    // Other entity, which playerEl touched.
+      e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
+      e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
+    });  
+  </script>
+</html
