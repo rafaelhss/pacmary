@@ -8,120 +8,132 @@
     <script src="https://cdn.rawgit.com/feiss/aframe-environment-component/ad57b15d/dist/aframe-environment-component.min.js"></script>
 <script src="//cdn.rawgit.com/donmccurdy/aframe-physics-system/v4.0.1/dist/aframe-physics-system.min.js"></script>
     <style>
-    body{
-        font-family: "Comic Sans MS", sans-serif;
-    }
-    #footer{
-        position: absolute;
-        bottom: 10%;
-        left: 2%;
-        z-index: 999;
-        font-weight: bold;  
-        text-align: right;
-        width: 100%;
         
-    }    
-    .footbar {
-        font-size: 120%;
-        
-        min-width: min-content;
-        width: 100%;
+        #score{
+            position: absolute;
+
+            left: 2%;
+
+            min-width: min-content;
             
+            height: min-content;
 
-       
-        transition: left 3s ease;
-        
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        
-        color: brown;
-        
-        
-        text-align: left;
-        
+            z-index: 999;
 
-
-        visibility: visible;
-        opacity: 1;
-        background-image: linear-gradient(to right, 
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0.5),
-            rgba(0,0,0,0));
-    }
-    .footbar #headline {
-        padding-left: 10px;
-        width: 100%;
-    }
-    #tvlogo{
-        width: min-content;
-        padding: 5px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    #tvlogo > div:nth-of-type(even) {
-        background-color: white;
-        color: blue;
-        border-bottom: 1px solid brown;
-        border-bottom-right-radius: 10%;
-        border-right: 1px solid brown;
-        border-top-right-radius: 10%;
-        border-top: 1px solid brown;
-    }
-    #tvlogo > div:nth-of-type(odd) {
-        background-color: brown;
-        color: white;
-        border-bottom: 1px solid brown;
-        border-bottom-left-radius: 10%;
-        border-left: 1px solid brown;
-        border-top-left-radius: 10%;
-        border-top: 1px solid brown;
-        
-    }
-        #datebar{
             display: flex;
-            text-align: right; 
-                font-size: 90%;
-        
+            justify-content: center;
+            align-items: center;
+            font-size: 150%;
+            text-align: center; 
+            color: white; 
+            
+            font: bold Helvetica, Arial, Sans-Serif;
+            text-shadow: 1px 1px #fe4902, 
+            2px 2px #fe4902, 
+            3px 3px #fe4902;
         }
-    #datetxt{
-        width: min-content;
-        height: min-content;
-        background-color: brown;
-        color: white;
-        position: absolute;
-        right: 2%;
-    }
+
     </style>  
 
-      
+
   </head>
   <body>
-    <!--
-    <div id="footer">
-        <div class="footbar">
-          <div id="tvlogo">
-              <div>Fake</div><div>TV</div>
-          </div>
-          <div id="headline"><marquee id="newstxt">Este texto vai "rolar" da direita para esquerda</marquee></div>
-        </div>
-        <div id="datebar">
-            <div id="datetxt">JAN2020</div>
+
+    <div id="score">
+        <div>
+            <h1>Score: <span id="scoren">0</span>/<span id="enemycountn">0</span></h1>
+            <h1><span id="min">0</span>:<span id="sec">20</span>:<span id="msec">20</span></h1>
         </div>
     </div>
--->
       
-     <script type="text/javascript">
+    <script type="text/javascript">
+         
+         
+    var velocities = []; 
+    var hip = 5; 
+    var maxhip = 60;
+    var minhip = 5;
+    var accelerating = false;
+       
+    setInterval(function(){
+        if(accelerating && hip <= maxhip){
+            hip++;
+            //document.getElementById("ghost").setAttribute("color", "red");  
+            
+        } 
+        if(!accelerating && hip >= minhip){
+            hip--;
+            //document.getElementById("ghost").setAttribute("color", "blue");  
+        }
+        //console.log("hip: " + hip)
+    }, 10)     
+         
+    var updateCamera = function(cam, ghost){
+        var vector = document.getElementById("playerball").body.velocity;
+        angle = THREE.Math.radToDeg( Math.atan2(vector.x,vector.z) ); 
+
+        var hipotenusa = 3; //distance from ball
+        var velocityX = hipotenusa * Math.sin(DegreesToRadians(angle));
+        var velocityZ = hipotenusa * Math.cos(DegreesToRadians(angle));
+
+        var x = document.getElementById("playerball").getAttribute("position").x;  
+        var y = document.getElementById("playerball").getAttribute("position").y;
+        var z = document.getElementById("playerball").getAttribute("position").z;
+
+        var pos = x+ ", " + y + ", " + z;
+        
+        ghost.setAttribute("position", pos); 
+        
+        var rot = document.getElementById("cam").getAttribute("rotation");
+      //  rot.x += 270;
+        //rot.y += 180;
+        ghost.setAttribute("rotation", rot);
+
+        
+        x -= velocityX * 15;
+        z -= velocityZ * 15;
+        y += 20; // always 10 up
+
+        cam.components.camera.camera.parent.position.set(x, y, z);         
+    }  
+    
+    function updateEnemiesBody(){
+        var bolaenemy = document.getElementsByClassName("bolaenemyfullbody");
+            for (var i = 0; i < bolaenemy.length; i++) {
+                //console.log(": " + bolaenemy.item(i).getAttribute("teste")) 
+                var pos = document.getElementById(bolaenemy.item(i).getAttribute("ballid")).getAttribute("position")
+                bolaenemy.item(i).setAttribute("position", pos)
+                
+                var vx = document.getElementById(bolaenemy.item(i).getAttribute("ballid")).body.velocity.x;
+                var vz = document.getElementById(bolaenemy.item(i).getAttribute("ballid")).body.velocity.z;
+                
+                
+                 var vector = document.getElementById(bolaenemy.item(i).getAttribute("ballid")).body.velocity;
+                 var ang = THREE.Math.radToDeg( Math.atan2(vector.x,vector.z) ); 
+                 var rot = 0 + ", " + ang + ", " + 0;
+                 bolaenemy.item(i).setAttribute("rotation", rot)
+                
+            }
+    }
+         
+         
+         
+
+    AFRAME.registerComponent('cursor-listener', {
+        init: function () {
+            this.el.addEventListener('mousedown', function (evt) {
+                 accelerating = true;
+            });
+            this.el.addEventListener('mouseup', function (evt) {
+                 accelerating = false;
+            });
+        }
+    });     
          
     function DegreesToRadians(valDeg){
         return ((2*Math.PI)/360*valDeg)
     }
+         
 	AFRAME.registerComponent("listener", {
 		schema : 
 		{
@@ -133,54 +145,33 @@
 		tick : function()
 		{	
             var angle = (document.getElementById("cam").getAttribute("rotation").y);
-            var up = (document.getElementById("cam").getAttribute("rotation").x);
-
-            var hip = 25;
+            
+            
             var velocityX = 10;
             var velocityY = 10;
 
             velocityX = hip * Math.sin(DegreesToRadians(angle))
-            velocityY = hip * Math.cos(DegreesToRadians(angle))
+            velocityZ = hip * Math.cos(DegreesToRadians(angle))
             
+            var origVelX = document.getElementById("playerball").body.velocity.x;
             var origVelY = document.getElementById("playerball").body.velocity.y;
-            document.getElementById("playerball").body.velocity.set(-velocityX, origVelY, -velocityY);
+            var origVelZ = document.getElementById("playerball").body.velocity.z;
             
             
+            //modo direto
+            document.getElementById("playerball").body.velocity.set(-velocityX, origVelY, -velocityZ);
             
-            /*
-            var x = document.getElementById("playerball").getAttribute("position").x;  
-            var y = document.getElementById("playerball").getAttribute("position").y;
-            var z = document.getElementById("playerball").getAttribute("position").z;
-            
-            z = z + 10
-            this.el.components.camera.camera.parent.position.set(x, y, z);
-            */
-            var vector = document.getElementById("playerball").body.velocity;
-            angle = THREE.Math.radToDeg( Math.atan2(vector.x,vector.z) ); 
-            //this.el.components.camera.camera.parent.rotation.set(0 , angle, 0);
-            
-            var hip = 1;
-            var velocityX;
-            var velocityY;
 
-            velocityX = hip * Math.sin(DegreesToRadians(angle))
-            velocityY = hip * Math.cos(DegreesToRadians(angle))
-        
-        
-            var x = document.getElementById("playerball").getAttribute("position").x;  
-            var y = document.getElementById("playerball").getAttribute("position").y;
-            var z = document.getElementById("playerball").getAttribute("position").z;
             
-            x -= velocityX * 15;
-            
-            z -= velocityY * 15;
-            
-            y += 6;
-        
-           //document.getElementById("otherball").body.position.set(x-velocityX, y, z-velocityY);
-           this.el.components.camera.camera.parent.position.set(x, y, z);  
            
-            //
+            //updade camera 
+            updateCamera(this.el, document.getElementById("ghost")); 
+           
+            //update enemies body
+            updateEnemiesBody();
+            
+                
+                
             
             
            /* this.el.components.camera.camera.parent.position.add(this.el.components.camera.camera.getWorldDirection().multiplyScalar(this.data.stepFactor));
@@ -189,31 +180,111 @@
 	});
 </script> 
     
-    <a-scene physics id="sce">
+    <a-scene physics="restitution: 0.01" id="sce" cursor="rayOrigin: mouse">
         <a-assets>
+            <img id="sky" src="img/sky.jpg" crossorigin="anonymous" /> 
+            
             <img id="sand" src="img/sand.jpg" crossorigin="anonymous" /> 
+            <img id="grass" src="img/grass.jpg" crossorigin="anonymous" /> 
+            <img id="lava" src="img/lava.jpg" crossorigin="anonymous" /> 
+            <img id="timegrandesrc" src="img/timegrande-min.jpg" crossorigin="anonymous" /> 
+          
             <img id="estrela" src="img/estrelas-min.jpg" crossorigin="anonymous" /> 
+            <img id="bolaface" src="img/bola/face.png" crossorigin="anonymous" /> 
+            <img id="bolahair" src="img/bola/hair.png" crossorigin="anonymous" /> 
+            <img id="bolaarm" src="img/bola/arm.png" crossorigin="anonymous" /> 
+            <img id="bolaforearm" src="img/bola/forearm.png" crossorigin="anonymous" /> 
+            <img id="bolahand" src="img/bola/hand.png" crossorigin="anonymous" /> 
+            <img id="b" src="img/b-min.png" crossorigin="anonymous" /> 
+          
+            
+            <a-asset-item id="ghost-obj" src="models/ghost/3d-model.obj"></a-asset-item> 
+            
+            <img id="aecio" src="img/aecio-min.png" crossorigin="anonymous" />
+            <img id="alberto" src="img/alberto-min.png" crossorigin="anonymous" />
+            <img id="ceni" src="img/ceni-min.png" crossorigin="anonymous" />
+            <img id="choro" src="img/choro-min.png" crossorigin="anonymous" />
+            <img id="fe" src="img/fe-min.png" crossorigin="anonymous" />
+            <img id="bola" src="img/bola-min.png" crossorigin="anonymous" />
+
+            <img id="gordo" src="img/gordo-min.png" crossorigin="anonymous" />
+            <img id="itair" src="img/itair-min.png" crossorigin="anonymous" />
+            <img id="perrella" src="img/perrella-min.png" crossorigin="anonymous" />
+            <img id="serginho" src="img/serginho-min.png" crossorigin="anonymous" />
+            <img id="tiago" src="img/tiago-min.png" crossorigin="anonymous" />
+            <img id="wagner" src="img/wagner-min.png" crossorigin="anonymous" />
+
        </a-assets>
+        <a-sky src="#sky"></a-sky>
         
-        <a-camera id="cam"  listener="stepFactor:0.05" position="0 4 3">
-            <a-entity id="cursor" cursor="fuse: true;fuseTimeout:500"
-                material="color:black"
-                geometry="primitive:ring"
-                position="0 0 -1"
-                scale="0.01 0.01 0.01"
-            ></a-entity>
+        <a-camera id="cam"  listener="stepFactor:0.005" position="0 4 3">
+
         </a-camera>
         
-        <a-sphere id="playerball" position="0 3 -10" radius="2" material="src: #estrela" dynamic-body></a-sphere>
-      <a-sphere id="otherball" position="-10 3 -10" radius="2" color="red" material="src: #estrela" dynamic-body></a-sphere>
-      
+        
+        <!--
+        <a-cone cursor-listener 
+                obj-model="obj: #ghost-obj;" 
+                id="playerhorse" color="tomato" radius-bottom="2" radius-top="0.5" position="0 0 0" scale="0.3 0.3 0.3" ></a-cone>
+        -->
+
+        <a-sphere id="playerball"  position="0 3 50" radius="4" material="src: #estrela" dynamic-body visible="false"></a-sphere>
+        
+        <a-sphere  
+                  cursor-listener
+                  obj-model="obj: #ghost-obj;" 
+                  id="ghost"
+                  rotation="0 310 0"
+                  position="8.5 15 -2.5" 
+                  scale="5 5 5 "
+                  shadow material="src: #b; repeat: 1 1"></a-sphere>
+        
+        
+        
+<a-sphere class="bolaenemy" id="bolaenemy" dynamic-body cursor-listener radius="4" position="-10 0 -30" visible="false"></a-sphere>
+<a-sphere class="bolaenemyfullbody" scale="2 2 2" id="bolafullbody" radius="0.01" position="-10 0 -30" material="opacity: 0.01; transparent: true" ballid="bolaenemy">
+        <a-box width="3.5" height="3.5" depth="3.5" position="0 9.01 0" material="src: #bolahair" >
+        <a-plane width="3.5" height="3.5" position="0 0 1.8 " material="src: #bolaface;"></a-plane>
+        </a-box>
+        <a-box id="bolabody" width="3" height="4" depth="3" position="0 5 0" material="src: #bolaforearm; repeat: 0.5 0.5;" ></a-box>
+
+        <a-box width="0.7" height="2.2" depth="0.5" position="1 5.9 1.5" color="white"></a-box>
+        <a-box width="0.7" height="1" depth="0.5" position="-1 6.5 1.5" color="white"></a-box>
+        <a-box width="0.7" height="0.2" depth="3" position="-1 7 0" color="white"></a-box>
+        <a-box width="0.7" height="0.2" depth="3" position="1 7 0" color="white"></a-box>
+        <a-box width="2.3" height="0.2" depth="0.7" position="0 7 -1.4" color="white"></a-box>
+
+        <a-box width="1.2" height="0.7" depth="0.9" rotation="0 0 0" position="3.48 5.7 0" material="src: #bolahand; repeat: 5 5; "></a-box>
+        <a-box width="1.5" height="1" depth="1" rotation="0 0 45" position="2.68 5.15 0" 
+        material="src: #bolaforearm;"></a-box>
+        <a-box width="1" height="2" depth="1" rotation="0 0 45" position="2 5.5 0"  material="src: #bolaarm;"></a-box>
+        <a-box width="1" height="2" depth="1" rotation="0 0 315" position="-2 5.5 0" material="src: #bolaarm;"></a-box>
+        <a-box width="1.5" height="1" depth="1" rotation="0 0 315" position="-2.68 5.15 0"  material="src: #bolaforearm;"></a-box>
+        <a-box width="1.2" height="0.7" depth="0.9" rotation="0 180 0" position="-3.48 5.7 0" material="src: #bolahand;"></a-box>
+
+        <a-box width="1" height="8" depth="1" rotation="-20 0 0" position="-0.8 3 0" material="src: #bolaarm;"
+        animation="property: rotation; to: 20 0 0; dur: 500; easing: linear; loop: true; dir:alternate" ></a-box>
+        <a-box width="1" height="8" depth="1" rotation="20 0 0" position="0.8 3 0" material="src: #bolaarm;"
+        animation="property: rotation; to: -20 0 0; dur: 500; easing: linear; loop: true; dir:alternate" ></a-box>
+</a-sphere>        
+        
+
+<a-sphere class="bolaenemy" id="bolaenemy2" dynamic-body cursor-listener radius="4" position="-5 0 -35" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy3" dynamic-body cursor-listener radius="4" position="-10 0 -25" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy4" dynamic-body cursor-listener radius="4" position="0 0 -30" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy5" dynamic-body cursor-listener radius="4" position="-35 0 -35" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy6" dynamic-body cursor-listener radius="4" position="-50 0 -25" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy7" dynamic-body cursor-listener radius="4" position="0 0 30" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy8" dynamic-body cursor-listener radius="4" position="-80 0 -35" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy9" dynamic-body cursor-listener radius="4" position="-70 0 -25" visible="false" ></a-sphere>
+<a-sphere class="bolaenemy" id="bolaenemy10" dynamic-body cursor-listener radius="4" position="90 0 -30" visible="false" ></a-sphere>
         <!--
         <a-box width="220" 
                material="src: #cerca; repeat: 10 1; opacity: 0.9"
-               height="1" depth="0.2" position="-7.5 0.6 -5" rotation="0 270 0" static-body></a-box>
+               height="10" depth="0.2" position="-7.5 0.6 -5" rotation="0 270 0" static-body></a-box>
         <a-box width="220"
                material="src: #cerca; repeat: 10 1; opacity: 0.9"
-               height="1" depth="0.2" position="7.5 0.6 -5" rotation="0 270 0" static-body></a-box>
+               height="10" depth="0.2" position="7.5 0.6 -5" rotation="0 270 0" static-body></a-box>
         <a-box width="220"
                material="src: #cerca; repeat: 10 1; opacity: 0.9"
                height="0.2" depth="0.2" position="0 0.6 -5" rotation="0 270 0" static-body></a-box>
@@ -222,14 +293,158 @@
         <!-- Green pipe. 
 <a-cylinder color="green"  height="100" open-ended="true" theta-start="270" theta-length="180"  radius="10" position="20 6 -10" material="side: double" rotation="90 0 0" static-body ></a-cylinder>
         
-        -->
+      
       <a-entity id="env1" environment="preset:tron; shadow:true; seed:19; lightPosition: 0.7 0.7 0.7"></a-entity>
     
-         
+          
+        <a-box width="30" height="1" depth="300" position="0 0 0" static-body></a-box>
+        <a-box width="30" height="1" depth="300" position="0 70.59034 271.75569" color="red" static-body rotation="330 0 0" scale=""></a-box>
+        
+        -->
+       
+        
+        <!-- bonus -->
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #gordo; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="-375 10 -375" static-body></a-box>
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #bola; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="375 10 -375" static-body></a-box>
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #fe; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="-375 10 375" static-body></a-box>
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #perrella; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="375 10 375" static-body></a-box>
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #serginho; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="-250 10 -125" static-body></a-box>
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #wagner; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="250 10 -125" static-body></a-box>
+        <a-box class="bonus" radius-bottom="10" radius-top="3"
+               material="src: #itair; repeat: 1 1; opacity: 0.9; transparent:true;"
+               height="20" depth="20" width="20"position="0 10 125" static-body></a-box>        
+        
+        
+        
         <!-- Physics terrain -->
-        <a-box id="terrain" width="420" height="0.1" depth="420" position="0 0 0" static-body visible="true" material="src:#sand; opacity: 0.8"  ></a-box>
-     
-         
+        <a-box id="terrain" width="1000" height="0.1" depth="1000" position="0 -1 0" static-body visible="true" color="gray" material="opacity: 0.65; src: #lava; repeat: 20 20;"  ></a-box>
+        <a-box id="terrain" width="5000" height="0.1" depth="5000" position="0 -100 0" static-body visible="true" material="src:#b; opacity: 1; repeat: 20 20"  ></a-box>
+        
+        <a-box id="terrain" width="1000" height="15" depth="10" position="0 5 437" static-body visible="true" material="src:#lava; opacity: 1"  ></a-box>
+        <a-box id="terrain" width="1000" height="15" depth="10" position="0 5 -437" static-body visible="true" material="src:#lava; opacity: 1"  ></a-box>
+        <a-box id="terrain" width="10" height="15" depth="1000" position="437 5 0" static-body visible="true" material="src:#lava; opacity: 1"  ></a-box>
+        <a-box id="terrain" width="10" height="15" depth="1000" position="-437 5 0" static-body visible="true" material="src:#lava; opacity: 1"  ></a-box>
+        
+        <a-box position="-312.5 0 -250" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="-312.5 0 -125" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="187.5 0 -250" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>        
+        <a-box position="312.5 0 -125" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="312.5 0 0" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="62.5 0 0" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>        
+        <a-box position="187.5 0 0" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box> 
+        <a-box position="62.5 0 125" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>        
+        <a-box position="187.5 0 125" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>         
+        <a-box position="-65.5 0 250" 
+               class="innerwall vert" width="5" height="25" depth="125" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>         
+        
+        
+
+        <a-box position="-125 0 -312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>         
+        <a-box position="-250 0 -312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box> 
+        <a-box position="125 0 -312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>         
+        <a-box position="250 0 -312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box> 
+        <a-box position="-125 0 -187.5.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>  
+        <a-box position="0 0 -187.5.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>  
+        <a-box position="125 0 -187.5.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>  
+        <a-box position="250 0 -187.5.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>  
+        <a-box position="-250 0 -62.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box> 
+        <a-box position="-125 0 -62.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="-375 0 62.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="-250 0 62.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="-125 0 62.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="0 0 62.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box> 
+        <a-box position="-250 0 187.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="-125 0 187.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="250 0 187.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="375 0 187.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        
+        <a-box position="-312.5 0 312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="-187.5 0 312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="125 0 312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="250 0 312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box>
+        <a-box position="250 0 -312.5" 
+               class="innerwall horiz" width="125" height="25" depth="10" static-body visible="true" material="src:#lava; opacity: 0.99"  ></a-box> 
+        
+        
+        
+        <!-- piramide -->
+        <a-box position="-400 5 10"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>
+         <a-box position="-400 5 20"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        <a-box position="-400 5 30"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>
+        
+        <a-box position="-390 5 10"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
+       
+         <a-box position="-390 5 20"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        <a-box position="-390 5 30"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        <a-box position="-380 5 10"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
+       
+         <a-box position="-380 5 20"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        <a-box position="-380 5 30"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        
+        <a-box position="-395 15 15"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        <a-box position="-395 15 25"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
+       
+         <a-box position="-385 15 15"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+        <a-box position="-385 15 25"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
+         <a-box position="-390 25 20"
+               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
+        
         
         
 
@@ -251,143 +466,120 @@
     </a-scene>
   </body>
   <script>
+   
+  
+function randomizeEnemyVelocities(){
+   
+    var bolaenemy = document.getElementsByClassName("bolaenemy");
+    for (var i = 0; i < bolaenemy.length; i++) {
+    try{
+        var vel = bolaenemy.item(i).body.velocity;
+        var velx = Math.floor(Math.random()*maxhip)-(maxhip/2)
+        var velz = Math.floor(Math.random()*maxhip)-(maxhip/2)
+        var vely = vel.y;
+        bolaenemy.item(i).body.velocity.set(velx, vely, velz);
+    } catch(e){
+        console.log(e)
+    }   
+        
+    
+    } 
+}
       
+      
+function addBolaFullBody(ballid){
+    
+    var sceneEl = document.querySelector('a-scene');
+    var bolaBody = document.createElement('a-sphere');
+    bolaBody.setAttribute('material',"opacity: 0.01; transparent: true");
+    bolaBody.innerHTML = document.getElementById("bolafullbody").innerHTML;
+    bolaBody.setAttribute('id',ballid+"fullbody");
+    bolaBody.setAttribute('ballid', ballid);
+    bolaBody.setAttribute('scale', "2 2 2");
+    
+    bolaBody.setAttribute('radius', "0.01");
+    
+    bolaBody.classList.add('bolaenemyfullbody');
+    sceneEl.appendChild(bolaBody);
+    
+}  
+      
+      
+
+var score = 0;
+var enemycount = 0;
+
 document.querySelector('a-scene').addEventListener('loaded', function () {
 console.log("loaded")
-      
-  /*  console.log(document.querySelector("#cam").body);
-    console.log(document.getElementById("cam").body);
-    var initz = document.querySelector("#cam").body.position.z;
-      
-      function getstages(){
-          return [{
-                newstxt:"Tensao entre EUA e Ira cresce a cada dia e terceira guerra mundial se torna iminente.",
-                datetxt:"JAN2020"
-          },{
-                newstxt:"Corona virus fudeu abike.",
-                datetxt:"FEV2020"
-          },{
-                newstxt:"2Corona virus fudeu abike.",
-                datetxt:"FEV2020"
-          },{
-                newstxt:"3Corona virus fudeu abike.",
-                datetxt:"MAR2020"
-          },{
-                newstxt:"4Corona virus fudeu abike.",
-                datetxt:"ABR2020"
-          },{
-                newstxt:"5Corona virus fudeu abike.",
-                datetxt:"MAI2020"
-          }]
 
-      }
-     
-      var stages = getstages();
-      
     
-      
-      
-    var sizeterrain = document.querySelector('#terrain').getAttribute("width");
-    var stagesize = Math.floor(sizeterrain / stages.length);  
-      
+        
+    var html = document.getElementById("bolaenemy").innerHTML;
+    var bolaenemy = document.getElementsByClassName("bolaenemy");
+    
+    enemycount = bolaenemy.length;
+    document.getElementById("enemycountn").innerHTML = enemycount;
+    
+    for (var i = 0; i < bolaenemy.length; i++) {
+        addBolaFullBody(bolaenemy.item(i).id);
+    }  
+    
+    setInterval(randomizeEnemyVelocities, 3000);
     
     
-    
-    //bounce enemy
-    setInterval(function(){
-        var enemies = document.getElementsByClassName("enemy");
-        for (var i = 0; i < enemies.length; i++) {
+    var playerEl = document.getElementById("playerball")
+
+    playerEl.addEventListener('collide', function (e) {
+        
+        if(e.detail.body.el.className.indexOf("bolaenemy") >=0){
+            score = score + 1;
+            document.getElementById("scoren").innerHTML = score;
+            //document.getElementById("score").setAttribute("text", "value: "+score+";");
             
-            var x = enemies.item(i).body.position.x;
-            var speed = 40;
-            if(x > 0){
-                speed *= -1;
-            } 
-            console.log("x: " + x + "  speed: " + speed)
+            var pos = e.detail.body.el.body.position;
+            e.detail.body.el.body.position.set(pos.x, -5, pos.z);
             
-            var y = initEnemyY;
-            var z = enemies.item(i).body.position.z;
-            enemies.item(i).body.position.set(x, y, z);
-            enemies.item(i).body.velocity.set(speed, 6, 0);
-            
-            
+            var v = e.detail.target.el.body.velocity;
+            e.detail.body.el.body.velocity.set(v.x, v.y, v.z);
         }
-    },2000)
-    //fix enemy height
-    setInterval(function(){
-        var enemies = document.getElementsByClassName("enemy");
-        for (var i = 0; i < enemies.length; i++) {
-            var x = enemies.item(i).body.position.x;
-            var y = initEnemyY;
-            var z = enemies.item(i).body.position.z;
-            enemies.item(i).body.position.set(x, y, z);
-        }
-    },1000000)
-    
-    
-    
-    //check stage
-    var stagen = 0;
-    var oldstagen = stagen;
-    setInterval(function(){
-     var deltaz = initz - document.querySelector("#cam").body.position.z;
-        stagen = Math.floor(deltaz / stagesize);
-        
-        document.querySelector('#newstxt').innerHTML=stages[stagen].newstxt;
-        document.querySelector('#datetxt').innerHTML=stages[stagen].datetxt;
-
-    },500);
-    
-    var initEnemyY = 10;
-    //check enemy passed for recycle
-    setInterval(function(){
-        var userz = document.querySelector("#cam").body.position.z;
-        var enemies = document.getElementsByClassName("enemy");
-        for (var i = 0; i < enemies.length; i++) {
+        if(e.detail.body.el.className.indexOf("bonus") >=0){
             
-            if(userz < enemies.item(i).body.position.z){
-                var x = enemies.item(i).body.position.x;
-                var y = initEnemyY;
-                var z = userz - 50;
-                enemies.item(i).body.position.set(x, y, z);
-            }
-            
+            var v = e.detail.target.el.body.velocity;
+            e.detail.target.el.body.velocity.set(v.x, 30, v.z);
         }
-    },500)
-    
-    */
         
+        
+      e.detail.target.el;  // Original entity (playerEl).
+      e.detail.body.el;    // Other entity, which playerEl touched.
+      e.detail.contact;    // Stats about the collision (CANNON.ContactEquation).
+      e.detail.contact.ni; // Normal (direction) of the collision (CANNON.Vec3).
+    }); 
     
-    
-    
-    window.addEventListener('mousedownxx', function () {
+    const second = 1000,
+    minute = second * 60,
+    hour = minute * 60,
+    day = hour * 24;
+    var distance = 0;
 
-        console.log("click")
 
-        var item =  "#playerball";
-        /*
-        var x = document.getElementById("cam").getAttribute("position").x;  
-        var y = document.getElementById("cam").getAttribute("position").y;
-        var z = document.getElementById("cam").getAttribute("position").z;
-        document.querySelector(item).body.position.set(x, y, z);
-*/
-         
-        var angle = (document.getElementById("cam").getAttribute("rotation").y);
-        var up = (document.getElementById("cam").getAttribute("rotation").x);
-        
-        var hip = 2;
-        var velocityX = 10;
-        var velocityY = 10;
-        
-        velocityX = hip * Math.sin(DegreesToRadians(angle))
-		velocityY = hip * Math.cos(DegreesToRadians(angle))
-        
-        
-        
-        document.querySelector(item).body.velocity.set(-velocityX, 0, -velocityY);
-        
+    //let countDown = new Date('Sep 30, 2019 00:00:00').getTime(),
+    //let countDown = new Date().getTime(),
+    x = setInterval(function() {    
+        //let now = new Date().getTime(),
+        //distance =  now - countDown;
+        if(score != enemycount){
+                    distance += 50;
+                    document.getElementById('min').innerText = ('0' + (Math.floor((distance/1000)/60) % 60)).slice(-2);
+                    document.getElementById('sec').innerText = ('0' + (Math.floor(distance/1000) % 60)).slice(-2);  
+                    document.getElementById('msec').innerText = ('00' + Math.floor(distance % 1000)).slice(-3);// Math.floor((distance % (day)) / 
+
+        }
     
- }) 
+
+    }, 50)
+    
+   
+   
 })
   </script>
 </html>
