@@ -51,7 +51,7 @@
          
     var velocities = []; 
     var hip = 5; 
-    var maxhip = 60;
+    var maxhip = 80;
     var minhip = 5;
     var accelerating = false;
        
@@ -213,8 +213,94 @@
             <img id="serginho" src="img/serginho-min.png" crossorigin="anonymous" />
             <img id="tiago" src="img/tiago-min.png" crossorigin="anonymous" />
             <img id="wagner" src="img/wagner-min.png" crossorigin="anonymous" />
+            
+            <img id="1921" src="img/1921.jpg" crossorigin="anonymous" />
+            <img id="fala" src="img/fala.png" crossorigin="anonymous" />
 
-       </a-assets>
+            <a-mixin id="cube1921" geometry="primitive: box; height:20; width:20; depth:20;" material="src: #1921" dynamic-body></a-mixin>
+            <a-mixin id="cubetimegrande" geometry="primitive: box; height:20; width:20; depth:20;" material="src: #timegrandesrc" dynamic-body></a-mixin>
+            <a-mixin id="cubefala" geometry="primitive: box; height:20; width:20; depth:20;" material="src: #fala" dynamic-body></a-mixin>
+             
+            <a-mixin id="spheretime" geometry="primitive: sphere; radius:20;" material="repeat: 4 4; " dynamic-body></a-mixin>
+            <a-mixin id="spheretime1" material="src: img/time/1.svg;"></a-mixin>
+            <a-mixin id="spheretime2" material="src: img/time/2.svg;"></a-mixin>
+            <a-mixin id="spheretime3" material="src: img/time/3.svg;"></a-mixin>
+            <a-mixin id="spheretime4" material="src: img/time/4.svg;"></a-mixin>
+            <a-mixin id="spheretime5" material="src: img/time/5.svg;"></a-mixin>
+            <a-mixin id="spheretime6" material="src: img/time/6.svg;"></a-mixin>
+            <a-mixin id="spheretime7" material="src: img/time/7.svg;"></a-mixin>
+            <a-mixin id="spheretime8" material="src: img/time/8.svg;"></a-mixin>
+            <a-mixin id="spheretime9" material="src: img/time/9.svg;"></a-mixin>
+            <a-mixin id="spheretime10" material="src: img/time/10.svg;"></a-mixin>
+            <a-mixin id="spheretime11" material="src: img/time/11.svg;"></a-mixin>
+            <a-mixin id="spheretime12" material="src: img/time/12.svg;"></a-mixin>
+            <a-mixin id="spheretime13" material="src: img/time/13.svg;"></a-mixin>
+            <a-mixin id="spheretime14" material="src: img/time/14.svg;"></a-mixin>
+            <a-mixin id="spheretime15" material="src: img/time/15.svg;"></a-mixin>
+            <a-mixin id="spheretime16" material="src: img/time/16.svg;"></a-mixin>
+            <a-mixin id="spheretime17" material="src: img/time/17.svg;"></a-mixin>
+            <a-mixin id="spheretime18" material="src: img/time/18.svg;"></a-mixin>
+            <a-mixin id="spheretime19" material="src: img/time/19.svg;"></a-mixin>
+            
+           
+            
+            <a-mixin id="bolaenemymix" dynamic-body cursor-listener geometry="primitive: sphere; radius:4;" visible="false"></a-mixin>
+            
+
+        </a-assets>
+            <!-- piramide-->
+            <a-entity position="-370 10 0">
+                <a-entity  position="-20 0 -20" mixin="cube1921"></a-entity>
+                <a-entity  position="0 0 -20" mixin="cube1921"></a-entity>
+                <a-entity  position="20 0 -20" mixin="cube1921"></a-entity>
+                <a-entity  position="-20 0 0" mixin="cube1921"></a-entity>
+                <a-entity  position="0 0 0" mixin="cube1921"></a-entity>
+                <a-entity  position="20 0 0" mixin="cube1921"></a-entity>
+                <a-entity  position="-20 0 20" mixin="cube1921"></a-entity>
+                <a-entity  position="0 0 20" mixin="cube1921"></a-entity>
+                <a-entity  position="20 0 20" mixin="cube1921"></a-entity>
+                <a-entity  position="-10 20 -10" mixin="cube1921"></a-entity>
+                <a-entity  position="-10 20 10" mixin="cube1921"></a-entity>
+                <a-entity  position="10 20 10" mixin="cube1921"></a-entity>
+                <a-entity  position="10 20 -10" mixin="cube1921"></a-entity>
+                <a-entity  position="0 40 0" mixin="cube1921"></a-entity>
+            </a-entity>
+            <a-entity  class="piramid" position="0 10 -300">
+                <a-entity  position="-20 0 -20" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="0 0 -20" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="20 0 -20" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="-20 0 0" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="0 0 0" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="20 0 0" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="-20 0 20" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="0 0 20" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="20 0 20" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="-10 20 -10" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="-10 20 10" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="10 20 10" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="10 20 -10" mixin="cubetimegrande"></a-entity>
+                <a-entity  position="0 40 0" mixin="cubetimegrande"></a-entity>
+            </a-entity>
+            <a-entity  class="piramid" position="125 10 240">
+                <a-entity  position="-20 0 -20" mixin="cubefala"></a-entity>
+                <a-entity  position="0 0 -20" mixin="cubefala"></a-entity>
+                <a-entity  position="20 0 -20" mixin="cubefala"></a-entity>
+                <a-entity  position="-20 0 0" mixin="cubefala"></a-entity>
+                <a-entity  position="0 0 0" mixin="cubefala"></a-entity>
+                <a-entity  position="20 0 0" mixin="cubefala"></a-entity>
+                <a-entity  position="-20 0 20" mixin="cubefala"></a-entity>
+                <a-entity  position="0 0 20" mixin="cubefala"></a-entity>
+                <a-entity  position="20 0 20" mixin="cubefala"></a-entity>
+                <a-entity  position="-10 20 -10" mixin="cubefala"></a-entity>
+                <a-entity  position="-10 20 10" mixin="cubefala"></a-entity>
+                <a-entity  position="10 20 10" mixin="cubefala"></a-entity>
+                <a-entity  position="10 20 -10" mixin="cubefala"></a-entity>
+                <a-entity  position="0 40 0" mixin="cubefala"></a-entity>
+            </a-entity>
+            
+            
+        
+        
         <a-sky src="#sky"></a-sky>
         
         <a-camera id="cam"  listener="stepFactor:0.005" position="0 4 3">
@@ -268,7 +354,7 @@
         animation="property: rotation; to: -20 0 0; dur: 500; easing: linear; loop: true; dir:alternate" ></a-box>
 </a-sphere>        
         
-
+<!--
 <a-sphere class="bolaenemy" id="bolaenemy2" dynamic-body cursor-listener radius="4" position="-5 0 -35" visible="false" ></a-sphere>
 <a-sphere class="bolaenemy" id="bolaenemy3" dynamic-body cursor-listener radius="4" position="-10 0 -25" visible="false" ></a-sphere>
 <a-sphere class="bolaenemy" id="bolaenemy4" dynamic-body cursor-listener radius="4" position="0 0 -30" visible="false" ></a-sphere>
@@ -277,31 +363,39 @@
 <a-sphere class="bolaenemy" id="bolaenemy7" dynamic-body cursor-listener radius="4" position="0 0 30" visible="false" ></a-sphere>
 <a-sphere class="bolaenemy" id="bolaenemy8" dynamic-body cursor-listener radius="4" position="-80 0 -35" visible="false" ></a-sphere>
 <a-sphere class="bolaenemy" id="bolaenemy9" dynamic-body cursor-listener radius="4" position="-70 0 -25" visible="false" ></a-sphere>
-<a-sphere class="bolaenemy" id="bolaenemy10" dynamic-body cursor-listener radius="4" position="90 0 -30" visible="false" ></a-sphere>
-        <!--
-        <a-box width="220" 
-               material="src: #cerca; repeat: 10 1; opacity: 0.9"
-               height="10" depth="0.2" position="-7.5 0.6 -5" rotation="0 270 0" static-body></a-box>
-        <a-box width="220"
-               material="src: #cerca; repeat: 10 1; opacity: 0.9"
-               height="10" depth="0.2" position="7.5 0.6 -5" rotation="0 270 0" static-body></a-box>
-        <a-box width="220"
-               material="src: #cerca; repeat: 10 1; opacity: 0.9"
-               height="0.2" depth="0.2" position="0 0.6 -5" rotation="0 270 0" static-body></a-box>
+<a-sphere class="bolaenemy" id="bolaenemy10" dynamic-body cursor-listener radius="4" position="90 0 -30" visible="false" ></a-sphere>       
 -->
-       
-        <!-- Green pipe. 
-<a-cylinder color="green"  height="100" open-ended="true" theta-start="270" theta-length="180"  radius="10" position="20 6 -10" material="side: double" rotation="90 0 0" static-body ></a-cylinder>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
+        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
         
-      
-      <a-entity id="env1" environment="preset:tron; shadow:true; seed:19; lightPosition: 0.7 0.7 0.7"></a-entity>
-    
-          
-        <a-box width="30" height="1" depth="300" position="0 0 0" static-body></a-box>
-        <a-box width="30" height="1" depth="300" position="0 70.59034 271.75569" color="red" static-body rotation="330 0 0" scale=""></a-box>
         
-        -->
-       
         
         <!-- bonus -->
         <a-box class="bonus" radius-bottom="10" radius-top="3"
@@ -410,42 +504,7 @@
         
         
         
-        <!-- piramide -->
-        <a-box position="-400 5 10"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>
-         <a-box position="-400 5 20"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        <a-box position="-400 5 30"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>
-        
-        <a-box position="-390 5 10"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
-       
-         <a-box position="-390 5 20"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        <a-box position="-390 5 30"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        <a-box position="-380 5 10"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
-       
-         <a-box position="-380 5 20"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        <a-box position="-380 5 30"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        
-        <a-box position="-395 15 15"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        <a-box position="-395 15 25"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
-       
-         <a-box position="-385 15 15"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-        <a-box position="-385 15 25"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box>  
-         <a-box position="-390 25 20"
-               class="timegrandebox" width="10" height="10" depth="10" dynamic-body visible="true" material="src:#timegrandesrc; opacity: 0.99"  ></a-box> 
-        
-        
+              
         
 
         
@@ -504,14 +563,49 @@ function addBolaFullBody(ballid){
     
 }  
       
-      
+function addTeamBall(i){
+               
+    var sceneEl = document.querySelector('a-scene');
+    var team = document.createElement('a-entity');
+    team.setAttribute('mixin',"spheretime " + "spheretime" + i);
+    
+    var x = Math.floor((Math.random() * 600) - 300)
+    var z = Math.floor((Math.random() * 600) - 300)
+    
+    team.setAttribute('position', x + " -80 " + z);
+    sceneEl.appendChild(team);
+}      
 
 var score = 0;
 var enemycount = 0;
 
+      
+function initEnemies(){
+    var bolaenemy = document.getElementsByClassName("bolaenemy");
+    
+
+    for (var i = 1; i < bolaenemy.length; i++) {
+        bolaenemy.item(i).id = "bolaenemy"+i;
+        
+        var x = Math.floor((Math.random() * 600) - 300)
+        var z = Math.floor((Math.random() * 600) - 300)
+        
+        bolaenemy.item(i).setAttribute('position', x + " 5 " + z)
+    }
+    
+}
+      
+      
+      
 document.querySelector('a-scene').addEventListener('loaded', function () {
 console.log("loaded")
 
+    initEnemies();
+    
+    for (var i = 1; i <= 19; i++) {
+        addTeamBall(i);
+    }  
+    
     
         
     var html = document.getElementById("bolaenemy").innerHTML;
