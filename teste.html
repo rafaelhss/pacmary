@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="js/aframe.min.js"></script>
-<script src="js/aframe-physics-system.min.js"></script>
+      <script src="js/aframe-physics-system.min.js"></script>
     <style>
         
         #score{
@@ -22,7 +22,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 150%;
+            font-size: 100%;
             text-align: center; 
             color: white; 
             
@@ -383,16 +383,6 @@
         <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
         <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
         <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
-        <a-entity mixin="bolaenemymix" class="bolaenemy" id="tempid" position="0 2000 0"></a-entity>
         
         
         
@@ -590,6 +580,7 @@ function initEnemies(){
         var z = Math.floor((Math.random() * 600) - 300)
         
         bolaenemy.item(i).setAttribute('position', x + " 5 " + z)
+        
     }
     
 }
